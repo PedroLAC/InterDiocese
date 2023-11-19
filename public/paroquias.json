@@ -12,7 +12,9 @@
             "quinta": "7h e 19h30",
             "sexta": "7h",
             "sabado": "7h e 20h"
-        }
+        },
+        "imagem": "PAROQUIA_DE_SAO_JOSE__VICENTE_DE_CARVALHO.png",
+        "endereco": "Rua Hélio Ferreira, 598, Jardim Boa Esperança - Guarujá - SP"
     },
     {
         "id": 2,
@@ -27,7 +29,9 @@
             "quinta": "7h e 19h30",
             "sexta": "7h",
             "sabado": "7h e 20h"
-        }
+        },
+        "imagem": "PAROQUIA-CRISTO-REI-GUARUJA-SP.jpeg",
+        "endereco": "Rua Américo Martins dos Santos, 829 - Jardim Paraíso- São Vicente - SP"
     },
     {
         "id": 3,
@@ -42,6 +46,8 @@
             "quinta": "7h e 19h30",
             "sexta": "7h",
             "sabado": "7h e 20h"
-        }
+        },
+        "imagem": "CristoRei_SVic.jpg",
+        "endereco": "Av. Cruzeiro do Sul, 732, Bal. Pernambuco - Guarujá - SP"
     }
 ]

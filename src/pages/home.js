@@ -1,13 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Modal } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositionAsync } from 'expo-location';
 import * as Location from 'expo-location';
+import { ModalParoquia } from '../components/modalParoquia';
+import { Atalhos } from '../components/atalhos';
 
 export function Home({ navigation }) {
   const [location, setLocation] = useState(null);
   const [paroquias, setParoquias] = useState();
+  const [paroquia, setParoquia] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setModalVisible(false);
+    }, [])
+  );
 
   const mapRef = useRef(null);
 
@@ -38,6 +49,11 @@ export function Home({ navigation }) {
     });
   }
 
+  function AbrirModal(item){
+    setModalVisible(true);
+    setParoquia(item);
+  }
+
   useEffect(() => {
     fetchParoquias();
   }, []);
@@ -55,7 +71,7 @@ export function Home({ navigation }) {
           ref={mapRef}
           style={styles.map}
           showsUserLocation={true}
-          minZoomLevel={17}
+          minZoomLevel={16}
           initialRegion={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -67,21 +83,22 @@ export function Home({ navigation }) {
             paroquias && paroquias.map(item => (
               <Marker
                   key={item.id}
-                  onPress={() => navigation.navigate('Paroquia', { item })}
+                  onPress={() => AbrirModal(item)}
                   coordinate={{
                   latitude: Number(item.latitude),
                   longitude: Number(item.longitude)
                 }}>
-                  <Callout>
-                    <View>
-                      <Text>{item.nome}</Text>
-                    </View>
-                  </Callout>
               </Marker>
             ))
           }
         </MapView>
       }
+
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <ModalParoquia navigation={navigation} paroquia={paroquia} fecharModal={ () => setModalVisible(false) } />
+      </Modal>
+
+      <Atalhos navigation={navigation} paroquias={paroquias}/>
     </View>
   );
 }
@@ -96,5 +113,9 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: '100%'
+  },
+  modalParoquia: {
+    height: '80%'
   }
+
 });
