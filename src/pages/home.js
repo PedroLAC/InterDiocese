@@ -99,6 +99,7 @@ export function Home({ navigation }) {
 
   useEffect(() => {
     GetFavoritos();
+    GetHistorico();
   }, []);
 
   useEffect(() => {
@@ -145,7 +146,7 @@ export function Home({ navigation }) {
         <ModalParoquia navigation={navigation} paroquia={paroquia} fecharModal={ () => setModalVisible(false) } />
       </Modal>
 
-      <Atalhos navigation={navigation} favoritos={favoritos} paroquias={paroquias} />
+      <Atalhos navigation={navigation} favoritos={favoritos} historico={historico} />
     </View>
   );
 }

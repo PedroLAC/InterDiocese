@@ -1,25 +1,45 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 
-export function Atalhos({ navigation, favoritos }) {
+export function Atalhos({ navigation, favoritos, historico }) {
+    const [atalho, setAtalho] = useState(1);
+
     return (
         <View style={styles.atalhosArea}>
             <View style={styles.opcoes}>
-                <TouchableOpacity style={styles.botaoOpcoes} >
+                <TouchableOpacity style={[styles.botaoOpcoes, atalho === 1 && styles.botaoPressionado]} onPress={() => { setAtalho(1) }}>
                     <Text style={styles.textoAtalhos}>Favoritos</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.botaoOpcoes} >
+                <TouchableOpacity style={[styles.botaoOpcoes, atalho === 2 && styles.botaoPressionado]} onPress={() => setAtalho(2)} >
                     <Text style={styles.textoAtalhos}>Histórico</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.scrollAreaFavoritos}>
                 <View style={styles.areaFavoritos}>
                     {
-                        favoritos && favoritos.map(paroquia => (
-                            <TouchableOpacity style={styles.botao} key={paroquia.id} onPress={() => navigation.navigate('Paroquia', { paroquia })} >
-                                <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
-                                <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
-                            </TouchableOpacity>
-                        ))
+                        atalho === 1
+                            ?
+                            favoritos.map(paroquia => (
+                                <TouchableOpacity
+                                    style={styles.botao}
+                                    key={paroquia.id}
+                                    onPress={() => navigation.navigate('Paroquia', { paroquia })}
+                                >
+                                    <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
+                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
+                                </TouchableOpacity>
+                            ))
+                            :
+                            historico.map(paroquia => (
+                                <TouchableOpacity
+                                    style={styles.botao}
+                                    key={paroquia.id}
+                                    onPress={() => navigation.navigate('Paroquia', { paroquia })}
+                                >
+                                    <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
+                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
+                                </TouchableOpacity>
+                            ))
                     }
                 </View>
             </ScrollView>
@@ -52,6 +72,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         height: "100%"
+    },
+    botaoPressionado: {
+        backgroundColor: '#2980b9', // Cor mais escura quando pressionado
     },
     areaFavoritos: {
         width: "100%",
