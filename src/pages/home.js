@@ -22,6 +22,7 @@ export function Home({ navigation }) {
     React.useCallback(() => {
       setModalVisible(false);
       GetFavoritos();
+      GetHistorico();
     }, [])
   );
 
