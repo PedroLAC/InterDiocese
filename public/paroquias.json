@@ -2,8 +2,8 @@
     {
         "id": 1,
         "nome": "Paróquia Cristo Rei",
-        "latitude": "-23.988666",
-        "longitude": "-46.393906",
+        "latitude": "-23.987320",
+        "longitude": "-46.391478",
         "missas": {
             "domingo": "8h, 9h30, 11h, 18h e 19h30",
             "segunda": "7h",
@@ -49,5 +49,90 @@
         },
         "imagem": "CristoRei_SVic.jpg",
         "endereco": "Av. Cruzeiro do Sul, 732, Bal. Pernambuco - Guarujá - SP"
+    },
+    {
+        "id": 4,
+        "nome": "Paróquia Senhor Bom Jesus",
+        "latitude": "-23.986125",
+        "longitude": "-46.393801",
+        "missas": {
+            "domingo": "8h, 9h30, 11h, 18h e 19h30",
+            "segunda": "7h",
+            "terca": "7h, 9h, 16h e 19h30",
+            "quarta": "7h e 19h30",
+            "quinta": "7h e 19h30",
+            "sexta": "7h",
+            "sabado": "7h e 20h"
+        },
+        "imagem": "PAROQUIA-SENHOR_BOM_JESUS-GUARUJA.png",
+        "endereco": "Rua Heleno Corrêa de Lima, 365, Vila Zilda - Guarujá - SP"
+    },
+    {
+        "id": 5,
+        "nome": "Paróquia São Vicente Mártir",
+        "latitude": "-23.986546",
+        "longitude": "-46.392900",
+        "missas": {
+            "domingo": "8h, 9h30, 11h, 18h e 19h30",
+            "segunda": "7h",
+            "terca": "7h, 9h, 16h e 19h30",
+            "quarta": "7h e 19h30",
+            "quinta": "7h e 19h30",
+            "sexta": "7h",
+            "sabado": "7h e 20h"
+        },
+        "imagem": "PAROQUIA-SAO-VICENTE-MARTIR.png",
+        "endereco": "Praça João Pessoa, s/n - Centro - São Vicente - SP"
+    },
+    {
+        "id": 6,
+        "nome": "Paróquia São João Evangelista",
+        "latitude": "-23.989046",
+        "longitude": "-46.393383",
+        "missas": {
+            "domingo": "8h, 9h30, 11h, 18h e 19h30",
+            "segunda": "7h",
+            "terca": "7h, 9h, 16h e 19h30",
+            "quarta": "7h e 19h30",
+            "quinta": "7h e 19h30",
+            "sexta": "7h",
+            "sabado": "7h e 20h"
+        },
+        "imagem": "PAROQUIA_SAO_JOAO_EVANGELISTA_SV.png",
+        "endereco": "Rua Marcolino Xavier de carvalho, 26 - Cidade Náutica - São Vicente - SP"
+    },
+    {
+        "id": 7,
+        "nome": "Paróquia São João Batista",
+        "latitude": "-23.990644",
+        "longitude": "-46.394381",
+        "missas": {
+            "domingo": "8h, 9h30, 11h, 18h e 19h30",
+            "segunda": "7h",
+            "terca": "7h, 9h, 16h e 19h30",
+            "quarta": "7h e 19h30",
+            "quinta": "7h e 19h30",
+            "sexta": "7h",
+            "sabado": "7h e 20h"
+        },
+        "imagem": "Paroquia_Sao_Joao_Batista_-_Peruibe.jpg",
+        "endereco": "Praça Mons. Lino dos Passos, 52, Centro - Peruíbe - SP"
+    },
+    {
+        "id": 8,
+        "nome": "Paróquia Santa Teresinha do Menino Jesus",
+        "latitude": "-23.989456",
+        "longitude": "-46.392092",
+        "missas": {
+            "domingo": "8h, 9h30, 11h, 18h e 19h30",
+            "segunda": "7h",
+            "terca": "7h, 9h, 16h e 19h30",
+            "quarta": "7h e 19h30",
+            "quinta": "7h e 19h30",
+            "sexta": "7h",
+            "sabado": "7h e 20h"
+        },
+        "imagem": "sta_terezinha_menino_jesus-introducao.jpg",
+        "endereco": "Rua Oscar Pereira da Silva, 168 - Belas Artes - Itanhaém - SP"
     }
 ]
