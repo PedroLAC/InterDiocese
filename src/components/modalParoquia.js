@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export function ModalParoquia({ navigation, paroquia, fecharModal }) {
+export function ModalParoquia({ navigation, paroquia, location, fecharModal }) {
     return (
         <View style={styles.container}>
             <View style={styles.modalConteudo}>
@@ -11,7 +11,7 @@ export function ModalParoquia({ navigation, paroquia, fecharModal }) {
                         <Text style={styles.textoBotao}>Voltar</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.botao, styles.botaoMais]} onPress={() => navigation.navigate('Paroquia', { paroquia })}>
+                    <TouchableOpacity style={[styles.botao, styles.botaoMais]} onPress={() => navigation.navigate('Paroquia', { paroquia, location })}>
                         <Text style={styles.textoBotaoMais}>Mais informações</Text>
                     </TouchableOpacity>
                 </View>

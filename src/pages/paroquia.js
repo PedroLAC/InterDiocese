@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Paroquia({ route }) {
@@ -7,6 +7,7 @@ export function Paroquia({ route }) {
     const [favoritos, setFavoritos] = useState([]);
     const [historico, setHistorico] = useState([]);
     const [ehFavorito, setEhFavorito] = useState(false);
+    const [location, setLocation] = useState(null);
 
     function AdicionarFavorito() {
         GetConteudo("favoritos").then(favs => {
@@ -76,16 +77,17 @@ export function Paroquia({ route }) {
             setHistorico(hist);
         };
         const loadData = async () => {
-            if (route.params && route.params.paroquia) {
+            if (route.params && route.params.paroquia && route.params.location) {
                 setParoquia(route.params.paroquia);
+                setLocation(route.params.location);
                 await loadFavoritos();
                 await loadHistorico();
             }
         };
-    
+
         loadData();
     }, [route.params]);
-    
+
     useEffect(() => {
         if (paroquia && historico) {
             SetHistorico();
@@ -95,6 +97,14 @@ export function Paroquia({ route }) {
     useEffect(() => {
         setEhFavorito(paroquia && favoritos.some(item => item.id === paroquia.id));
     }, [paroquia, favoritos]);
+
+    const openGoogleMaps = () => {
+        const origin = `${Number(location.coords.latitude)},${Number(location.coords.longitude)}`;
+        const destination = `${paroquia.latitude},${paroquia.longitude}`;
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
+
+        Linking.openURL(url);
+    };
 
     return (
         <View>
@@ -127,6 +137,9 @@ export function Paroquia({ route }) {
                         <Text style={styles.textoBotao}>Favoritar</Text>
                     </TouchableOpacity>
                 )}
+                <TouchableOpacity style={[styles.botao, styles.botaoAbrirMaps]} onPress={() => openGoogleMaps()}>
+                    <Text style={styles.textoBotao}>Como chegar</Text>
+                </TouchableOpacity>
             </View>
 
         </View>
@@ -166,5 +179,9 @@ const styles = StyleSheet.create({
     textoBotao: {
         color: "#FFF",
         fontWeight: "bold"
+    },
+    botaoAbrirMaps: {
+        backgroundColor: "green",
+        borderRadius: 8
     }
 })

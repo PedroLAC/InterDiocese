@@ -40,7 +40,7 @@ export function Home({ navigation }) {
   const GetFavoritos = async () => {
     try {
       let value = await AsyncStorage.getItem("favoritos");
-      if(value != null){
+      if (value != null) {
         value = JSON.parse(value);
         setFavoritos(value);
       }
@@ -52,7 +52,7 @@ export function Home({ navigation }) {
   const GetHistorico = async () => {
     try {
       let value = await AsyncStorage.getItem("historico");
-      if(value != null){
+      if (value != null) {
         value = JSON.parse(value);
         setHistorico(value);
       }
@@ -73,10 +73,35 @@ export function Home({ navigation }) {
     setParoquiasApi(data.data);
   }
 
-  const fetchParoquias = () => {
+  const fetchCoord = async (address) => {
+    const response = await fetch(
+      'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' +
+      'AIzaSyCS5dN8W7l2BIFAGH5tas35IpnUvUoqMyU', { method: 'GET' }
+    );
+
+    const data = await response.json();
+    if (data.results && data.results.length > 0) {
+      return {
+        latitude: data.results[0].geometry.location.lat,
+        longitude: data.results[0].geometry.location.lng
+      };
+    } else {
+      return {
+        latitude: 0,
+        longitude: 0
+      };
+    }
+  };
+
+  const fetchParoquias = async () => {
     let dados = require('../../public/paroquias.json');
+
+    for (const item of dados) {
+      const aux = await fetchCoord(item.endereco);
+      item.latitude = aux.latitude;
+      item.longitude = aux.longitude;
+    }
     fetchData();
-    
     setParoquias(dados);
   };
 
@@ -93,7 +118,7 @@ export function Home({ navigation }) {
     });
   }
 
-  function AbrirModal(item){
+  function AbrirModal(item) {
     setModalVisible(true);
     setParoquia(item);
   }
@@ -120,7 +145,6 @@ export function Home({ navigation }) {
           ref={mapRef}
           style={styles.map}
           showsUserLocation={true}
-          minZoomLevel={16}
           initialRegion={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -131,9 +155,9 @@ export function Home({ navigation }) {
           {
             paroquias && paroquias.map(item => (
               <Marker
-                  key={item.id}
-                  onPress={() => AbrirModal(item)}
-                  coordinate={{
+                key={item.id}
+                onPress={() => AbrirModal(item)}
+                coordinate={{
                   latitude: Number(item.latitude),
                   longitude: Number(item.longitude)
                 }}>
@@ -144,7 +168,7 @@ export function Home({ navigation }) {
       }
 
       <Modal visible={modalVisible} animationType="fade" transparent={true}>
-        <ModalParoquia navigation={navigation} paroquia={paroquia} fecharModal={ () => setModalVisible(false) } />
+        <ModalParoquia navigation={navigation} paroquia={paroquia} location={location} fecharModal={() => setModalVisible(false)} />
       </Modal>
 
       <Atalhos navigation={navigation} favoritos={favoritos} historico={historico} />
