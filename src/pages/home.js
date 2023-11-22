@@ -3,7 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import { StyleSheet, Text, View, Modal } from 'react-native';
+import {
+  StyleSheet, Text, View, Modal, TextInput, ScrollView, FlatList,
+  TouchableOpacity, TouchableWithoutFeedback, Keyboard
+} from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositionAsync } from 'expo-location';
 import * as Location from 'expo-location';
 import { ModalParoquia } from '../components/modalParoquia';
@@ -17,6 +20,9 @@ export function Home({ navigation }) {
   const [paroquiasApi, setParoquiasApi] = useState(null);
   const [favoritos, setFavoritos] = useState([]);
   const [historico, setHistorico] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredParoquias, setFilteredParoquias] = useState([]);
+  const mapRef = useRef(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -26,7 +32,12 @@ export function Home({ navigation }) {
     }, [])
   );
 
-  const mapRef = useRef(null);
+  const removeAccents = (str) => {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  };
 
   async function requestLocationPermissions() {
     const { granted } = await requestForegroundPermissionsAsync();
@@ -137,42 +148,83 @@ export function Home({ navigation }) {
     ListenerPosition();
   }, []);
 
+  const handleSearchInputChange = (text) => {
+    setSearchInput(text);
+    filterParoquias(text);
+  };
+
+  const filterParoquias = (text) => {
+    const normalizedText = removeAccents(text); // Remova a acentuação
+    const filtered = paroquias
+      ? paroquias.filter((paroquia) =>
+        removeAccents(paroquia.nome).toLowerCase().includes(normalizedText)
+      )
+      : [];
+    setFilteredParoquias(filtered);
+  };
+
+  const handlePressOutside = () => {
+    setFilteredParoquias([]); // Limpar a lista de opções ao pressionar fora
+    Keyboard.dismiss(); // Esconder o teclado ao pressionar fora
+  };
+
+
   return (
-    <View style={styles.container}>
-      {
-        location &&
-        <MapView
-          ref={mapRef}
-          style={styles.map}
-          showsUserLocation={true}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}>
+    <TouchableWithoutFeedback onPress={handlePressOutside}>
+      <View style={styles.container}>
 
-          {
-            paroquias && paroquias.map(item => (
-              <Marker
-                key={item.id}
-                onPress={() => AbrirModal(item)}
-                coordinate={{
-                  latitude: Number(item.latitude),
-                  longitude: Number(item.longitude)
-                }}>
-              </Marker>
-            ))
-          }
-        </MapView>
-      }
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Pesquisar Paróquias"
+          value={searchInput}
+          onChangeText={handleSearchInputChange}
+        />
+        <ScrollView style={styles.optionsList}>
+          {filteredParoquias.map((paroquia) => (
+            <TouchableOpacity
+              key={paroquia.id}
+              onPress={() => navigation.navigate('Paroquia', { paroquia, location })}
+              style={styles.optionItem}
+            >
+              <Text numberOfLines={1}>{paroquia.nome} - <Text style={styles.textoEndeco}>{paroquia.endereco}</Text></Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        {
+          location &&
+          <MapView
+            ref={mapRef}
+            style={styles.map}
+            showsUserLocation={true}
+            initialRegion={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }}>
 
-      <Modal visible={modalVisible} animationType="fade" transparent={true}>
-        <ModalParoquia navigation={navigation} paroquia={paroquia} location={location} fecharModal={() => setModalVisible(false)} />
-      </Modal>
+            {
+              paroquias && paroquias.map(item => (
+                <Marker
+                  key={item.id}
+                  onPress={() => AbrirModal(item)}
+                  coordinate={{
+                    latitude: Number(item.latitude),
+                    longitude: Number(item.longitude)
+                  }}>
+                </Marker>
+              ))
+            }
+          </MapView>
+        }
 
-      <Atalhos navigation={navigation} favoritos={favoritos} location={location} historico={historico} />
-    </View>
+        <Modal visible={modalVisible} animationType="fade" transparent={true}>
+          <ModalParoquia navigation={navigation} paroquia={paroquia} location={location} fecharModal={() => setModalVisible(false)} />
+        </Modal>
+
+        <Atalhos navigation={navigation} favoritos={favoritos} location={location} historico={historico} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -189,6 +241,39 @@ const styles = StyleSheet.create({
   },
   modalParoquia: {
     height: '80%'
+  },
+  searchInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    zIndex: 1,
+    position: 'absolute',
+    top: 33,
+    left: 10,
+    right: 10,
+  },
+  optionsList: {
+    maxHeight: 150,
+    backgroundColor: 'white',
+    zIndex: 2,
+    position: 'absolute',
+    marginHorizontal: 10,
+    top: 84,
+    left: 10,
+    right: 10,
+  },
+  optionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+  },
+  textoEndeco:{
+    fontSize: 12,
+    color: "gray"
   }
 
 });
