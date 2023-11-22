@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 
-export function Atalhos({ navigation, favoritos, historico }) {
+export function Atalhos({ navigation, favoritos, location, historico }) {
     const [atalho, setAtalho] = useState(1);
-
+    
     return (
         <View style={styles.atalhosArea}>
             <View style={styles.opcoes}>
@@ -23,7 +23,7 @@ export function Atalhos({ navigation, favoritos, historico }) {
                                 <TouchableOpacity
                                     style={styles.botao}
                                     key={paroquia.id}
-                                    onPress={() => navigation.navigate('Paroquia', { paroquia })}
+                                    onPress={() => navigation.navigate('Paroquia', { paroquia, favoritos, historico, location })}
                                 >
                                     <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
                                     <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
@@ -34,7 +34,7 @@ export function Atalhos({ navigation, favoritos, historico }) {
                                 <TouchableOpacity
                                     style={styles.botao}
                                     key={paroquia.id}
-                                    onPress={() => navigation.navigate('Paroquia', { paroquia })}
+                                    onPress={() => navigation.navigate('Paroquia', { paroquia, favoritos, historico, location })}
                                 >
                                     <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
                                     <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>

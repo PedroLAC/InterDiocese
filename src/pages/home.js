@@ -171,7 +171,7 @@ export function Home({ navigation }) {
         <ModalParoquia navigation={navigation} paroquia={paroquia} location={location} fecharModal={() => setModalVisible(false)} />
       </Modal>
 
-      <Atalhos navigation={navigation} favoritos={favoritos} historico={historico} />
+      <Atalhos navigation={navigation} favoritos={favoritos} location={location} historico={historico} />
     </View>
   );
 }
