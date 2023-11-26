@@ -5,12 +5,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import {
   StyleSheet, Text, View, Modal, TextInput, ScrollView, FlatList,
-  TouchableOpacity, TouchableWithoutFeedback, Keyboard
+  TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image
 } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositionAsync } from 'expo-location';
 import * as Location from 'expo-location';
 import { ModalParoquia } from '../components/modalParoquia';
 import { Atalhos } from '../components/atalhos';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export function Home({ navigation }) {
   const [location, setLocation] = useState(null);
@@ -23,6 +24,7 @@ export function Home({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [filteredParoquias, setFilteredParoquias] = useState([]);
   const mapRef = useRef(null);
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -72,6 +74,49 @@ export function Home({ navigation }) {
     }
   };
 
+  function extrairConteudoHTML(html) {
+    const cheerio = require('react-native-cheerio');
+    // html = html.replace(/<strong>\s*(h[iíìîï]st[oóòôö]r[iíìîï]a)\s*<\/strong>/gi, '<h3>História</h3>');
+    // html = html.replace(/<h3>/g, 'marcacaoDivisao <h3>');
+    // html = html.replace(/<\/h3>/g, '</h3> marcacaoDivisao');
+    // html = html.replace(/<h4>/g, 'marcacaoDivisao <h4>');
+    // html = html.replace(/<\/h4>/g, '</h4> marcacaoDivisao');
+
+    const htmlComQuebras = html.replace(/<br \/>/g, '\n\n');
+
+    console.log("html:: ", htmlComQuebras);
+    const $ = cheerio.load(htmlComQuebras, { decodeEntities: false });
+    const paragrafos = $('p, h3, h4');
+
+    let resultado = '';
+
+    paragrafos.each((index, paragrafo) => {
+      const conteudo = $(paragrafo).text().trim();
+      if (!conteudo.startsWith('{')) {
+        if (conteudo !== '') {
+          if (index !== 0) {
+            resultado += '\n\n';
+          }
+          resultado += `${conteudo}\n`;
+        }
+      }
+    });
+    // resultado = resultado.replace(new RegExp("atendimento", 'i'), '');
+    // resultado = resultado.replace(/^\s+|\s+$/g, '');
+    // resultado = resultado.replace(/{\/slider}/g, "");
+    // resultado = resultado.replace(/\{slider=(.*?)\}/g, 'marcacaoDivisao $1 marcacaoDivisao');
+    
+    // resultado = resultado.replace(/<h3>/g, 'marcacaoDivisao <h3>');
+
+    // resultado = resultado.replace(/<\/h3>/g, '</h3> marcacaoDivisao"');
+
+    resultado = resultado.replace(/\(VER MAPA\)/g, '');
+    // resultado = resultado.replace(/marcacaoDivisao/, '');
+    resultado = resultado.replace(/\n\n/g, "\n");
+
+    return resultado;
+  }
+
   const fetchData = async () => {
     const chaveAPI = "c2hhMjU2OjMxNzo1NTU4MTkyN2FlNWViZjY4ZDA5NTZjMmYwZDZmMmJiMjcxYTM2MDViNWFjODk4YjQ0NzliMWRjNzg5NTJlNmM";
     const response = await fetch('https://nunescarlos.online/api/index.php/v1/mini/paroquias', {
@@ -80,8 +125,39 @@ export function Home({ navigation }) {
         'Authorization': chaveAPI,
       },
     })
+    let value = [];
     const data = await response.json();
-    setParoquiasApi(data.data);
+    // let res = "";
+
+    // res = data.data[1].introtext;
+    // res = res.replace(/<h3>/g, 'marcacaoDivisao <h3>');
+    // res = res.replace(/<\/h3>/g, '</h3> marcacaoDivisao');
+    // console.log("res:: ", res);
+    console.log(extrairConteudoHTML(data.data[2].fulltext));
+    // data.data.map((item) => {
+    //   if (item.fulltext.length > item.introtext.length) {
+    //     value.push(extrairConteudoHTML(item.fulltext))
+    //   }
+    //   else {
+    //     value.push(extrairConteudoHTML(item.introtext))
+    //   }
+    // })
+    let i = 0;
+    // value.forEach(item => {
+    //   console.log("index =" + data.data[i].id + " - i = " + i);
+    //   let separar = item.split('marcacaoDivisao');
+    //   // let auxEnde = separar[1].match();
+    //   // let endereco = auxEnde[0];
+    //   let endereco = separar[1].substring(separar[1].indexOf("End"), separar[1].indexOf("\n", separar[1].indexOf("End")));
+    //   console.log("endereço:: ", endereco);
+    //   i+=1;
+    // });
+    // console.log("value:: ", value[2]);
+    // let separar = value[1].split('marcacaoDivisao');
+    // let auxEnde = separar[1].match(/Ende(.*?)(?=\n{2,})/s);
+    // let endereco = auxEnde[0];
+
+    // setParoquiasApi(data.data);
   }
 
   const fetchCoord = async (address) => {
@@ -112,7 +188,7 @@ export function Home({ navigation }) {
       item.latitude = aux.latitude;
       item.longitude = aux.longitude;
     }
-    fetchData();
+    // fetchData();
     setParoquias(dados);
   };
 
@@ -168,6 +244,10 @@ export function Home({ navigation }) {
     Keyboard.dismiss(); // Esconder o teclado ao pressionar fora
   };
 
+  const onCenterMap = () => {
+    ListenerPosition();
+  };
+
 
   return (
     <TouchableWithoutFeedback onPress={handlePressOutside}>
@@ -196,6 +276,7 @@ export function Home({ navigation }) {
             ref={mapRef}
             style={styles.map}
             showsUserLocation={true}
+            showsMyLocationButton={false}
             initialRegion={{
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
@@ -207,6 +288,7 @@ export function Home({ navigation }) {
               paroquias && paroquias.map(item => (
                 <Marker
                   key={item.id}
+                  icon={require('../../assets/markerIcon.png')}
                   onPress={() => AbrirModal(item)}
                   coordinate={{
                     latitude: Number(item.latitude),
@@ -217,6 +299,16 @@ export function Home({ navigation }) {
             }
           </MapView>
         }
+        <TouchableOpacity
+          style={{
+            position: 'absolute', top: 100, right: 16, backgroundColor: 'white',
+            padding: 6, borderRadius: 5, borderWidth: 1, borderColor: 'black',
+            borderBottomStyle: 'solid'
+          }}
+          onPress={onCenterMap}
+        >
+          <MaterialIcons name="center-focus-strong" size={24} color="black" />
+        </TouchableOpacity>
 
         <Modal visible={modalVisible} animationType="fade" transparent={true}>
           <ModalParoquia navigation={navigation} paroquia={paroquia} location={location} fecharModal={() => setModalVisible(false)} />
@@ -271,7 +363,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
   },
-  textoEndeco:{
+  textoEndeco: {
     fontSize: 12,
     color: "gray"
   }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
 
 export function Paroquia({ route }) {
     const [paroquia, setParoquia] = useState();
@@ -107,48 +108,52 @@ export function Paroquia({ route }) {
     };
 
     return (
-        <View>
-            {paroquia?.imagem && (
-                <Image
-                    source={{ uri: 'https://www.diocesedesantos.com.br/images/paroquias/' + paroquia.imagem }}
-                    style={{ width: '100%', height: 230 }}
-                    resizeMode="cover"
-                />
-            )}
-            <View style={styles.conteudo}>
-                <Text style={{ fontSize: 25, fontWeight: "bold", width: "100%", textAlign: "center", marginTop: 15 }}>{paroquia?.nome}</Text>
-                <Text style={[styles.textosMissas, { fontSize: 20, fontWeight: "bold", marginTop: 15, marginBottom: 8 }]}>Missas</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Domingo: {paroquia?.missas.domingo}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Segunda-feira: {paroquia?.missas.segunda}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Terça-feira: {paroquia?.missas.terca}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Quarta-feira: {paroquia?.missas.quarta}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Quinta-feira: {paroquia?.missas.quinta}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Sexta-feira: {paroquia?.missas.sexta}</Text>
-                <Text style={[styles.missaDia, styles.textosMissas]}>Sábado: {paroquia?.missas.sabado}</Text>
-            </View>
-
-            <View style={styles.areaFavorito}>
-                {ehFavorito ? (
-                    <TouchableOpacity style={[styles.botao, styles.botaoRemover]} onPress={() => RemoverFavorito()}>
-                        <Text style={styles.textoBotao}>Remover favorito</Text>
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity style={[styles.botao, styles.botaoFavorito]} onPress={() => AdicionarFavorito()}>
-                        <Text style={styles.textoBotao}>Favoritar</Text>
-                    </TouchableOpacity>
+        <ScrollView>
+            <View>
+                {paroquia?.imagem && (
+                    <Image
+                        source={{ uri: 'https://www.diocesedesantos.com.br/images/paroquias/' + paroquia.imagem }}
+                        style={{ width: '100%', height: 230 }}
+                        resizeMode="cover"
+                    />
                 )}
-                <TouchableOpacity style={[styles.botao, styles.botaoAbrirMaps]} onPress={() => openGoogleMaps()}>
-                    <Text style={styles.textoBotao}>Como chegar</Text>
-                </TouchableOpacity>
+                <View style={styles.conteudo}>
+                    <Text style={{ fontSize: 25, fontWeight: "bold", width: "100%", textAlign: "center", marginTop: 15 }}>{paroquia?.nome}</Text>
+                    <View style={styles.areaFavorito}>
+                        {ehFavorito ? (
+                            <TouchableOpacity style={[styles.botao, styles.botaoRemover]} onPress={() => RemoverFavorito()}>
+                                <Text style={styles.textoBotao}>Remover favorito</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={[styles.botao, styles.botaoFavorito]} onPress={() => AdicionarFavorito()}>
+                                <Text style={styles.textoBotao}>Favoritar</Text>
+                            </TouchableOpacity>
+                        )}
+                        <TouchableOpacity style={[styles.botao, styles.botaoAbrirMaps, { flexDirection: "row", justifyContent: "center", alignItems: "center" }]} onPress={() => openGoogleMaps()}>
+                            <Text style={styles.textoBotao}>Como chegar</Text>
+                            <AntDesign name="enviroment" size={20} style={{ marginLeft: 2 }} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={[styles.textosMissas, { fontSize: 20, fontWeight: "bold", marginTop: 15, marginBottom: 8 }]}>Missas</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Domingo: {paroquia?.missas.domingo}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Segunda-feira: {paroquia?.missas.segunda}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Terça-feira: {paroquia?.missas.terca}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Quarta-feira: {paroquia?.missas.quarta}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Quinta-feira: {paroquia?.missas.quinta}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Sexta-feira: {paroquia?.missas.sexta}</Text>
+                    <Text style={[styles.missaDia, styles.textosMissas]}>Sábado: {paroquia?.missas.sabado}</Text>
+                </View>
             </View>
-
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     missaDia: {
         fontSize: 17,
+    },
+    conteudo: {
+        marginBottom: 30
     },
     textosMissas: {
         marginHorizontal: 18
@@ -157,8 +162,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        height: "15%",
         padding: 20,
-        gap: 10
+        gap: 10,
+        marginTop: 10
     },
     botao: {
         width: "40%",
@@ -166,7 +173,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 14,
         marginBottom: 14,
-        padding: 8
+        padding: 8,
+        height: 40
     },
     botaoFavorito: {
         backgroundColor: "#392DE9",
