@@ -19,7 +19,7 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 	let resultado = '';
 	let enderecos = [];
 	let parsedImg = '';
-	//teste 
+
 	//Encontrar o endereço e também pegar o treco todo formatado legal
 	paragrafos.each((index, paragrafo) => {
 

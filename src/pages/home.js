@@ -125,21 +125,20 @@ export function Home({ navigation }) {
   };
 
   const fetchParoquias = async () => {
-    let dados = require('../../public/paroquias.json');
-
+    // let dados = require('../../public/paroquias.json');
 
     const parsedData = await fetchData();
-    if (parsedData) {
-      // for (const item of parsedData) {
-      //   let coord = await fetchCoord(item['enderecos']);
-      //   item.latitude = coord.latitude;
-      //   item.longitude = coord.longitude;
-      // }
-      setParoquias(parsedData);
+    // console.log("parsedData:: ", parsedData);
+
+    for (const item of parsedData) {
+      const aux = await fetchCoord(item.enderecos);
+      item.latitude = aux.latitude;
+      item.longitude = aux.longitude;
     }
 
-
-
+    if (parsedData) {
+      setParoquias(parsedData);
+    }
   };
 
   function ListenerPosition() {
