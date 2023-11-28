@@ -108,7 +108,7 @@ export function Paroquia({ route }) {
     };
 
     return (
-        <ScrollView>
+        <ScrollView style={{ height: "auto" }}>
             <View>
                 {paroquia?.imagem && (
                     <Image
@@ -134,14 +134,15 @@ export function Paroquia({ route }) {
                             <AntDesign name="enviroment" size={20} style={{ marginLeft: 2 }} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <Text style={[styles.textosMissas, { fontSize: 20, fontWeight: "bold", marginTop: 15, marginBottom: 8 }]}>Missas</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Domingo: {paroquia?.missas.domingo}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Segunda-feira: {paroquia?.missas.segunda}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Terça-feira: {paroquia?.missas.terca}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Quarta-feira: {paroquia?.missas.quarta}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Quinta-feira: {paroquia?.missas.quinta}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Sexta-feira: {paroquia?.missas.sexta}</Text>
-                    <Text style={[styles.missaDia, styles.textosMissas]}>Sábado: {paroquia?.missas.sabado}</Text>
+                    <Text style={[styles.textosMissas, styles.missaDia]}>{paroquia?.fullText}</Text>
+                    {/* <Text style={[styles.textosMissas, { fontSize: 20, fontWeight: "bold", marginTop: 15, marginBottom: 8 }]}>Missas</Text> */}
+                    {/* <Text style={[styles.missaDia, styles.textosMissas]}>Domingo: {paroquia?.missas.domingo}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Segunda-feira: {paroquia?.missas.segunda}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Terça-feira: {paroquia?.missas.terca}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Quarta-feira: {paroquia?.missas.quarta}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Quinta-feira: {paroquia?.missas.quinta}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Sexta-feira: {paroquia?.missas.sexta}</Text>
+                <Text style={[styles.missaDia, styles.textosMissas]}>Sábado: {paroquia?.missas.sabado}</Text> */}
                 </View>
             </View>
         </ScrollView>
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     conteudo: {
-        marginBottom: 30
+        marginBottom: 40
     },
     textosMissas: {
         marginHorizontal: 18
@@ -162,17 +163,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        height: "15%",
+        height: "auto",
         padding: 20,
         gap: 10,
-        marginTop: 10
+        marginTop: 10,
     },
     botao: {
         width: "40%",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 14,
-        marginBottom: 14,
         padding: 8,
         height: 40
     },

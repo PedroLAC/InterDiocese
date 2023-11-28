@@ -12,6 +12,7 @@ import * as Location from 'expo-location';
 import { ModalParoquia } from '../components/modalParoquia';
 import { Atalhos } from '../components/atalhos';
 import { MaterialIcons } from '@expo/vector-icons';
+import { parseHtml } from './apiParsing';
 
 export function Home({ navigation }) {
   const [location, setLocation] = useState(null);
@@ -74,49 +75,6 @@ export function Home({ navigation }) {
     }
   };
 
-  function extrairConteudoHTML(html) {
-    const cheerio = require('react-native-cheerio');
-    // html = html.replace(/<strong>\s*(h[iíìîï]st[oóòôö]r[iíìîï]a)\s*<\/strong>/gi, '<h3>História</h3>');
-    // html = html.replace(/<h3>/g, 'marcacaoDivisao <h3>');
-    // html = html.replace(/<\/h3>/g, '</h3> marcacaoDivisao');
-    // html = html.replace(/<h4>/g, 'marcacaoDivisao <h4>');
-    // html = html.replace(/<\/h4>/g, '</h4> marcacaoDivisao');
-
-    const htmlComQuebras = html.replace(/<br \/>/g, '\n\n');
-
-    console.log("html:: ", htmlComQuebras);
-    const $ = cheerio.load(htmlComQuebras, { decodeEntities: false });
-    const paragrafos = $('p, h3, h4');
-
-    let resultado = '';
-
-    paragrafos.each((index, paragrafo) => {
-      const conteudo = $(paragrafo).text().trim();
-      if (!conteudo.startsWith('{')) {
-        if (conteudo !== '') {
-          if (index !== 0) {
-            resultado += '\n\n';
-          }
-          resultado += `${conteudo}\n`;
-        }
-      }
-    });
-    // resultado = resultado.replace(new RegExp("atendimento", 'i'), '');
-    // resultado = resultado.replace(/^\s+|\s+$/g, '');
-    // resultado = resultado.replace(/{\/slider}/g, "");
-    // resultado = resultado.replace(/\{slider=(.*?)\}/g, 'marcacaoDivisao $1 marcacaoDivisao');
-    
-    // resultado = resultado.replace(/<h3>/g, 'marcacaoDivisao <h3>');
-
-    // resultado = resultado.replace(/<\/h3>/g, '</h3> marcacaoDivisao"');
-
-    resultado = resultado.replace(/\(VER MAPA\)/g, '');
-    // resultado = resultado.replace(/marcacaoDivisao/, '');
-    resultado = resultado.replace(/\n\n/g, "\n");
-
-    return resultado;
-  }
-
   const fetchData = async () => {
     const chaveAPI = "c2hhMjU2OjMxNzo1NTU4MTkyN2FlNWViZjY4ZDA5NTZjMmYwZDZmMmJiMjcxYTM2MDViNWFjODk4YjQ0NzliMWRjNzg5NTJlNmM";
     const response = await fetch('https://nunescarlos.online/api/index.php/v1/mini/paroquias', {
@@ -125,42 +83,28 @@ export function Home({ navigation }) {
         'Authorization': chaveAPI,
       },
     })
-    let value = [];
     const data = await response.json();
-    // let res = "";
+    //console.log(data)
+    let parsedHtml = [];
+    let paroquias = [];
 
-    // res = data.data[1].introtext;
-    // res = res.replace(/<h3>/g, 'marcacaoDivisao <h3>');
-    // res = res.replace(/<\/h3>/g, '</h3> marcacaoDivisao');
-    // console.log("res:: ", res);
-    console.log(extrairConteudoHTML(data.data[2].fulltext));
-    // data.data.map((item) => {
-    //   if (item.fulltext.length > item.introtext.length) {
-    //     value.push(extrairConteudoHTML(item.fulltext))
-    //   }
-    //   else {
-    //     value.push(extrairConteudoHTML(item.introtext))
-    //   }
-    // })
-    let i = 0;
-    // value.forEach(item => {
-    //   console.log("index =" + data.data[i].id + " - i = " + i);
-    //   let separar = item.split('marcacaoDivisao');
-    //   // let auxEnde = separar[1].match();
-    //   // let endereco = auxEnde[0];
-    //   let endereco = separar[1].substring(separar[1].indexOf("End"), separar[1].indexOf("\n", separar[1].indexOf("End")));
-    //   console.log("endereço:: ", endereco);
-    //   i+=1;
-    // });
-    // console.log("value:: ", value[2]);
-    // let separar = value[1].split('marcacaoDivisao');
-    // let auxEnde = separar[1].match(/Ende(.*?)(?=\n{2,})/s);
-    // let endereco = auxEnde[0];
+    for (const item of data['data']) {
+      if (!paroquias.includes(item['alias'])) {
+        if (!item['fulltext']) {
+          parsedHtml.push(parseHtml(item['id'], item['alias'], item['images'], item['introtext']))
 
-    // setParoquiasApi(data.data);
+        } else {
+          parsedHtml.push(parseHtml(item['id'], item['alias'], item['images'], item['fulltext']))
+        }
+        paroquias.push(item['alias'])
+      }
+    }
+
+    return parsedHtml;
+
   }
-
   const fetchCoord = async (address) => {
+    //Testando o fetch
     const response = await fetch(
       'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' +
       'AIzaSyCS5dN8W7l2BIFAGH5tas35IpnUvUoqMyU', { method: 'GET' }
@@ -181,15 +125,20 @@ export function Home({ navigation }) {
   };
 
   const fetchParoquias = async () => {
-    let dados = require('../../public/paroquias.json');
+    // let dados = require('../../public/paroquias.json');
 
-    for (const item of dados) {
-      const aux = await fetchCoord(item.endereco);
+    const parsedData = await fetchData();
+    // console.log("parsedData:: ", parsedData);
+
+    for (const item of parsedData) {
+      const aux = await fetchCoord(item.enderecos);
       item.latitude = aux.latitude;
       item.longitude = aux.longitude;
     }
-    // fetchData();
-    setParoquias(dados);
+
+    if (parsedData) {
+      setParoquias(parsedData);
+    }
   };
 
   function ListenerPosition() {
