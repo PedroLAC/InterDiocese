@@ -38,15 +38,18 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 				//CORTA LITERALMENTE TUDO QUE TIVER ANTES DO ENDEREÇO
 				let splitAddr = conteudo.toLowerCase().split(termoEncontrado)[1].trim()
 				//REMOVE OS DOIS PONTOS TBM, FIQUEI COM MEDO DE FAZER TD JUNTO E DAR PROBLEMA
+
 				splitAddr = splitAddr.split(':')[1]
-				//MESMA COISA PARA OS ENDERECOS SÓ QUE AGORA PARA O VER MAPA 
+
+				//MESMA COISA PARA OS ENDERECOS SÓ QUE AGORA PARA O VER MAPA-
 				const termoMapEncontrado = termosMap.find(termo => splitAddr.includes(termo))
 				if (termoMapEncontrado) {
 					//EXCLUI TUDO QUE TIVER A PARTIR DO VER MAPA :)
 					splitAddr = splitAddr.split(termoMapEncontrado)[0].trim()
-					enderecos.push(splitAddr)
-
 				}
+
+				enderecos.push(splitAddr)
+
 			}
 
 		}

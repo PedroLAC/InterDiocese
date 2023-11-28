@@ -104,7 +104,7 @@ export function Home({ navigation }) {
 
   }
   const fetchCoord = async (address) => {
-    //Testando o fetch
+    //Testando o fetc
     const response = await fetch(
       'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' +
       'AIzaSyCS5dN8W7l2BIFAGH5tas35IpnUvUoqMyU', { method: 'GET' }
@@ -134,6 +134,7 @@ export function Home({ navigation }) {
       const aux = await fetchCoord(item.enderecos);
       item.latitude = aux.latitude;
       item.longitude = aux.longitude;
+
     }
 
     if (parsedData) {
@@ -158,7 +159,7 @@ export function Home({ navigation }) {
     setModalVisible(true);
     setParoquia(item);
   }
-
+  //Teste
   useEffect(() => {
     GetFavoritos();
     GetHistorico();
