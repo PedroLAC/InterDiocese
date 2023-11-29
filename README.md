@@ -11,7 +11,7 @@ Facilitar o engajamento da comunidade, o aplicativo visa fornecer a localizaçã
 - PEDRO LEANDRO DE ANDRADE CRUZ
 
 ### Como executar a aplicação
-1 - git clone https://github.com/PedroLAC/InterDiocese
-2 - npm install
-3 - npm start
-4 - o programa utiliza a ferramenta Expo Go, basta escanear o código QR ou acessar a URL fornecida através da aplicação para testar o aplicativo.
+ 1. git clone https://github.com/PedroLAC/InterDiocese
+ 2. npm install
+ 3. npm start
+ 4. o programa utiliza a ferramenta Expo Go, basta escanear o código QR ou acessar a URL fornecida através da aplicação para testar o aplicativo.
