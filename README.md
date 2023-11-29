@@ -1,5 +1,5 @@
 # DioceseConnect
-![DioceseConnect](https://i.imgur.com/ykCpQoi.jpg)
+![DioceseConnect](https://i.imgur.com/l98ThID.jpg)
 
 
 ### Integrantes
