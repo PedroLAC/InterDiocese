@@ -1,5 +1,5 @@
 # DioceseConnect
-![DioceseConnect](https://i.imgur.com/l98ThID.jpg)
+![DioceseConnect](https://i.imgur.com/NRWaeRp.png)
 ## Missão
 Facilitar o engajamento da comunidade, o aplicativo visa fornecer a localização e dados relevantes sobre as paróquias, horários de missas e outras informações pertinentes, promovendo uma maior conexão entre os membros da Diocese.
 
