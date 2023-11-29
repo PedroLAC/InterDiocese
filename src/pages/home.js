@@ -104,10 +104,10 @@ export function Home({ navigation }) {
 
   }
   const fetchCoord = async (address) => {
-    //Testando o fetc
+    //Testando o fetch
     const response = await fetch(
       'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' +
-      'AIzaSyCS5dN8W7l2BIFAGH5tas35IpnUvUoqMyU', { method: 'GET' }
+      '', { method: 'GET' }
     );
 
     const data = await response.json();
@@ -134,9 +134,7 @@ export function Home({ navigation }) {
       const aux = await fetchCoord(item.enderecos);
       item.latitude = aux.latitude;
       item.longitude = aux.longitude;
-
     }
-
     if (parsedData) {
       setParoquias(parsedData);
     }
@@ -160,19 +158,19 @@ export function Home({ navigation }) {
     setParoquia(item);
   }
   //Teste
-  useEffect(() => {
-    GetFavoritos();
-    GetHistorico();
-  }, []);
 
   useEffect(() => {
-    fetchParoquias();
+    const fetchActions = async () => {
+      await requestLocationPermissions();
+      ListenerPosition();
+      await fetchParoquias();
+      await GetFavoritos();
+      await GetHistorico();
+    };
+
+    fetchActions();
   }, []);
 
-  useEffect(() => {
-    requestLocationPermissions();
-    ListenerPosition();
-  }, []);
 
   const handleSearchInputChange = (text) => {
     setSearchInput(text);

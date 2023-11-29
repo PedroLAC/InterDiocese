@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Interdisciplinar",
+    "name": "DioceseConnect",
     "slug": "Interdisciplinar",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lfsantosdev.Interdisciplinar"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "df282554-9a6b-40ed-8a04-0ea2071d3019"
+      }
     }
   }
 }

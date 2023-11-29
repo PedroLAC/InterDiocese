@@ -9,7 +9,8 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 		'enderarço', 'enderarços',
 		'enderarco', 'enderarcos'];
 	const termosMap = [
-		'(ver mapa)', '( ver mapa )', '(mapa)', '( mapa )'
+		'(ver mapa)', '( ver mapa )', '( ver mapa)', '(ver mapa )', '(mapa)', '( mapa )',
+		'(VER MAPA)', '( VER MAPA )', '( VER MAPA)', '(VER MAPA )', '(MAPA)', '( MAPA )',
 	]
 	const cheerio = require('react-native-cheerio');
 	const html = data.replace(/<br \/>/g, '\n\n');
@@ -46,6 +47,7 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 				if (termoMapEncontrado) {
 					//EXCLUI TUDO QUE TIVER A PARTIR DO VER MAPA :)
 					splitAddr = splitAddr.split(termoMapEncontrado)[0].trim()
+
 				}
 
 				enderecos.push(splitAddr)
@@ -61,7 +63,14 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 				if (index !== 0) {
 					resultado += '\n\n';
 				}
-				resultado += `${conteudo}\n`;
+				const termoMapEncontrado = termosMap.find(termo => conteudo.includes(termo))
+				if (termoMapEncontrado) {
+					//REMOVE A PALAVRA VER MAPA
+
+					resultado += conteudo.replace(termoMapEncontrado, '')
+				} else {
+					resultado += `${conteudo}\n`;
+				}
 			}
 		}
 		//========================================================================
