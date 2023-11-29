@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositionAsync } from 'expo-location';
 import * as Location from 'expo-location';
+import * as Notifications from 'expo-notifications';
 import { ModalParoquia } from '../components/modalParoquia';
 import { Atalhos } from '../components/atalhos';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -49,6 +50,27 @@ export function Home({ navigation }) {
       const currentPosition = await getCurrentPositionAsync();
       setLocation(currentPosition);
     }
+  }
+
+  async function registerForPushNotifications() {
+    let token;
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("=======TOKEN===========")
+    console.log(token);
+
+    return token;
   }
 
   const GetFavoritos = async () => {
@@ -130,11 +152,12 @@ export function Home({ navigation }) {
     const parsedData = await fetchData();
     // console.log("parsedData:: ", parsedData);
 
-    for (const item of parsedData) {
-      const aux = await fetchCoord(item.enderecos);
-      item.latitude = aux.latitude;
-      item.longitude = aux.longitude;
-    }
+    // for (const item of parsedData) {
+    //   const aux = await fetchCoord(item.enderecos);
+    //   item.latitude = aux.latitude;
+    //   item.longitude = aux.longitude;
+    // }
+
     if (parsedData) {
       setParoquias(parsedData);
     }
@@ -161,8 +184,9 @@ export function Home({ navigation }) {
 
   useEffect(() => {
     const fetchActions = async () => {
-      await requestLocationPermissions();
       ListenerPosition();
+      await requestLocationPermissions();
+      await registerForPushNotifications();
       await fetchParoquias();
       await GetFavoritos();
       await GetHistorico();
