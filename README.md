@@ -16,7 +16,7 @@ Facilitar o engajamento da comunidade, o aplicativo visa fornecer a localizaçã
  1. git clone https://github.com/PedroLAC/InterDiocese.
  2. npm install.
  3. npm start.
- 4. o programa utiliza a ferramenta Expo Go, basta escanear o código QR ou acessar a URL fornecida através da aplicação para testar o aplicativo. Basta escanear o QR code para baixar o app [ou clicar aqui](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pt&gl=US).
+ 4. o programa utiliza a ferramenta Expo Go, que possui um aplicativo, basta escanear o código QR ou acessar a URL fornecida através da aplicação para testar o aplicativo. Basta escanear o QR code para baixar o app [ou clicar aqui](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pt&gl=US).
 
 
 ![QRCode Expo Go](https://i.imgur.com/bx0CAhs.png)
