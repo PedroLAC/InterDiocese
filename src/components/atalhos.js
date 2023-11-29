@@ -26,7 +26,7 @@ export function Atalhos({ navigation, favoritos, location, historico }) {
                                     onPress={() => navigation.navigate('Paroquia', { paroquia, favoritos, historico, location })}
                                 >
                                     <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
-                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
+                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.enderecos}</Text>
                                 </TouchableOpacity>
                             ))
                             :
@@ -37,7 +37,7 @@ export function Atalhos({ navigation, favoritos, location, historico }) {
                                     onPress={() => navigation.navigate('Paroquia', { paroquia, favoritos, historico, location })}
                                 >
                                     <Text style={styles.nomeParoquia} numberOfLines={1}>{paroquia.nome}</Text>
-                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.endereco}</Text>
+                                    <Text style={styles.endParoquia} numberOfLines={1}>{paroquia.enderecos}</Text>
                                 </TouchableOpacity>
                             ))
                     }

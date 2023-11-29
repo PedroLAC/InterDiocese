@@ -187,6 +187,21 @@ export function Home({ navigation }) {
     setFilteredParoquias(filtered);
   };
 
+  // const arrumarEndereco = (end) => {
+  //   let palavras = end.split(' ');
+
+  //   // Capitaliza a primeira letra de cada palavra
+  //   for (let i = 0; i < palavras.length; i++) {
+  //     palavras[i] = palavras[i].charAt(0).toUpperCase() + palavras[i].slice(1).toLowerCase();
+  //   }
+
+  //   // Junta as palavras de volta em uma string
+  //   let endFormatado = palavras.join(' ');
+
+  //   console.log("end:: ", endFormatado);
+  //   return endFormatado;
+  // }
+
   const handlePressOutside = () => {
     setFilteredParoquias([]); // Limpar a lista de opções ao pressionar fora
     Keyboard.dismiss(); // Esconder o teclado ao pressionar fora
@@ -214,7 +229,7 @@ export function Home({ navigation }) {
               onPress={() => navigation.navigate('Paroquia', { paroquia, location })}
               style={styles.optionItem}
             >
-              <Text numberOfLines={1}>{paroquia.nome} - <Text style={styles.textoEndeco}>{paroquia.endereco}</Text></Text>
+              <Text numberOfLines={1}>{paroquia.nome} - <Text style={styles.textoEndeco}>{paroquia.enderecos}</Text></Text>
             </TouchableOpacity>
           ))}
         </ScrollView>

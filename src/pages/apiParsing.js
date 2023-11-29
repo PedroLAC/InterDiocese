@@ -93,6 +93,18 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 	}
 	const nomeParsed = palavras.join(' ');
 
+	// Arruma o endereco ex: av. conselheiro nebias -> Av. Conselheiro Nebias
+	const arrumarEndereco = (end) => {
+		end = end.trim()
+		let palavras = end.split(' ');
+	
+		for (let i = 0; i < palavras.length; i++) {
+		  palavras[i] = palavras[i].charAt(0).toUpperCase() + palavras[i].slice(1).toLowerCase();
+		}
+		let endFormatado = palavras.join(' ');
+		return endFormatado;
+	  }
+
 	const parsedData = {
 		id: idParoquia,
 		nome: nomeParsed,
@@ -100,7 +112,7 @@ export const parseHtml = (idParoquia, nome, image, data) => {
 		longitude: "",
 		imagem: parsedImg,
 		//Passando só o endereço principal por enquanto
-		enderecos: enderecos[0],
+		enderecos: arrumarEndereco(enderecos[0]),
 		fullText: resultado
 	};
 
