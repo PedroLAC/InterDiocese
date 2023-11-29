@@ -184,8 +184,8 @@ export function Home({ navigation }) {
 
   useEffect(() => {
     const fetchActions = async () => {
-      ListenerPosition();
       await requestLocationPermissions();
+      ListenerPosition();
       await registerForPushNotifications();
       await fetchParoquias();
       await GetFavoritos();
