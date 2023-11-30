@@ -22,7 +22,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.lfsantosdev.Interdisciplinar"
+      "config": { 
+      "googleMaps":{
+        "apiKey": ""
+      }
+      },
+      "package": "com.lfsantosdev.Interdisciplinar",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +41,22 @@
       "eas": {
         "projectId": "df282554-9a6b-40ed-8a04-0ea2071d3019"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
+    "owner": "interdiocese"
   }
 }

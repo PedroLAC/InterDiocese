@@ -26,7 +26,7 @@ export function Home({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [filteredParoquias, setFilteredParoquias] = useState([]);
   const mapRef = useRef(null);
-
+  //testando api
 
   useFocusEffect(
     React.useCallback(() => {
@@ -127,9 +127,10 @@ export function Home({ navigation }) {
   }
   const fetchCoord = async (address) => {
     //Testando o fetch
+    const apiKey = "";
     const response = await fetch(
       'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=' +
-      '', { method: 'GET' }
+      apiKey, { method: 'GET' }
     );
 
     const data = await response.json();
@@ -150,13 +151,12 @@ export function Home({ navigation }) {
     // let dados = require('../../public/paroquias.json');
 
     const parsedData = await fetchData();
-    // console.log("parsedData:: ", parsedData);
 
-    // for (const item of parsedData) {
-    //   const aux = await fetchCoord(item.enderecos);
-    //   item.latitude = aux.latitude;
-    //   item.longitude = aux.longitude;
-    // }
+    for (const item of parsedData) {
+      const aux = await fetchCoord(item.enderecos);
+      item.latitude = aux.latitude;
+      item.longitude = aux.longitude;
+    }
 
     if (parsedData) {
       setParoquias(parsedData);
@@ -166,7 +166,7 @@ export function Home({ navigation }) {
   function ListenerPosition() {
     watchPositionAsync({
       accuracy: Location.LocationAccuracy.Highest,
-      timeInterval: 1000,
+      timeInterval: 10,
       distanceInterval: 1
     }, (response) => {
       setLocation(response);
@@ -185,8 +185,8 @@ export function Home({ navigation }) {
   useEffect(() => {
     const fetchActions = async () => {
       await requestLocationPermissions();
-      ListenerPosition();
       await registerForPushNotifications();
+      ListenerPosition();
       await fetchParoquias();
       await GetFavoritos();
       await GetHistorico();
